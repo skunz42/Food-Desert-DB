@@ -76,6 +76,7 @@ def calcCoords(key, coords, city):
     nelng = geocode_result[0]['geometry']['bounds']['northeast']['lng'] #northeast longitude
     swlat = geocode_result[0]['geometry']['bounds']['southwest']['lat'] #southwest latitude
     swlng = geocode_result[0]['geometry']['bounds']['southwest']['lng'] #southwest longitude
+    km = 0.015
 
     templat = swlat #latitude and longitude used for calculation purposes
     templng = swlng
@@ -83,9 +84,9 @@ def calcCoords(key, coords, city):
     while (templat <= nelat): #north/south calc
         while (templng <= nelng): #east/west calc
             coords.append((templat, templng))
-            templng += 0.015 # ~ 1 km
+            templng += km # ~ 1 km
         templng = swlng
-        templat += 0.015 # ~ 1 km
+        templat += km # ~ 1 km
 
 '''***********************************************
                     writeCSV
@@ -141,7 +142,7 @@ def main():
         print("Please input in the following format: python fetchstores.py <file> <city> <state abbrev>")
         return 1
 
-    fn = str(sys.argv[1]) + ".csv"
+    fn = "DataFiles/" + str(sys.argv[1]) + ".csv"
     city = str(sys.argv[2])
     state = str(sys.argv[3])
     citystate = city + ", " + state

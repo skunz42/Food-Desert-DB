@@ -93,7 +93,7 @@ def calcCoords(key, coords, city):
     purpose:
         write data to csv
     params:
-        places - list of grocery store tuples
+        places - list of grocery store dictionaries
         fn - filename
         city - city name
     return:
@@ -103,9 +103,15 @@ def writeCSV(places, fn, city):
     minRatings = 30
     with open(fn, mode = 'w', newline = '') as csv_test:
         csv_writer = csv.writer(csv_test, delimiter = ',', quotechar = '"', quoting = csv.QUOTE_MINIMAL)
-        for p in places:
+        for p in places: # parse extraneous stores and spam entries and dollar stores
             if city in p['Address'] and int(p['Num Ratings']) > minRatings and "Dollar" not in p['Name']:
                 csv_writer.writerow([p['ID'], p['Name'], p['Latitude'], p['Longitude'], p['Address'], p['Rating'], p['Num Ratings']])
+
+def writeDB(places):
+    # DB Name - stores
+    # DB Collection - storeinfo
+    # Possibly split up by city
+    # Learn MongoDB lmao
 
 '''***********************************************
                     scrapeData
@@ -132,13 +138,14 @@ def scrapeData(fn, citystate, city):
                 storeInfo = IterJson(place)
                 gplaces.append(storeInfo)
 
-    writeCSV(list({v['ID']:v for v in gplaces}.values()), fn, city)
+    writeCSV(list({v['ID']:v for v in gplaces}.values()), fn, city) # insert unique elements into dictionary
 
 '''***********************************************
                     Main
 ***********************************************'''
 def main():
-    if (len(sys.argv) != 4):
+    numArgs = 4
+    if (len(sys.argv) != numArgs):
         print("Please input in the following format: python fetchstores.py <file> <city> <state abbrev>")
         return 1
 

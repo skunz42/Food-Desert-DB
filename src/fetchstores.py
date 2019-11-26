@@ -138,7 +138,8 @@ def writeDB(places, citystate):
                 'Longitude' : p['Longitude'],
                 'Address' : p['Address'],
                 'Rating' : p['Rating'],
-                'Num_Ratings' : p['Num Ratings']
+                'Num_Ratings' : p['Num Ratings'],
+                'File Location' : "../" + city + "" + state
             }
             db.storeinfo.insert_one(store)
 
@@ -183,7 +184,7 @@ def main():
         print("Please input in the following format: python fetchstores.py <file> <city> <state abbrev>")
         return 1
 
-    fn = "DataFiles/" + str(sys.argv[1]) + ".csv"
+    fn = "../DataFiles/" + str(sys.argv[1]) + ".csv"
     city = str(sys.argv[2])
     state = str(sys.argv[3])
     citystate = city + ", " + state

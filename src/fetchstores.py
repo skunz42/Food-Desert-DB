@@ -3,6 +3,7 @@ import json
 import urllib
 import sys
 import csv
+from pymongo import MongoClient
 
 '''***********************************************
                     findPlace
@@ -107,11 +108,42 @@ def writeCSV(places, fn, city):
             if city in p['Address'] and int(p['Num Ratings']) > minRatings and "Dollar" not in p['Name']:
                 csv_writer.writerow([p['ID'], p['Name'], p['Latitude'], p['Longitude'], p['Address'], p['Rating'], p['Num Ratings']])
 
-def writeDB(places):
-    # DB Name - stores
-    # DB Collection - storeinfo
-    # Possibly split up by city
-    # Learn MongoDB lmao
+'''***********************************************
+                    writeDB
+    purpose:
+        write data to DB
+    params:
+        places - dict of grocery stores
+        citystate - name of city that is being analyzed
+    return:
+        None
+***********************************************'''
+def writeDB(places, citystate):
+    client = MongoClient(port=27017)
+    db = client.CS432FP
+
+    city = citystate[:len(citystate)-4] # gets city name
+    state = citystate[len(citystate)-2:] #gets state abbreviation
+
+    minRatings = 30
+
+    for p in places:
+        if city in p['Address'] and int(p['Num Ratings']) > minRatings and "Dollar" not in p['Name']:
+            store = {
+                'ID': p['ID'],
+                'Name' : p['Name'],
+                'City' : city,
+                'State' : state,
+                'Latitude': p['Latitude'],
+                'Longitude' : p['Longitude'],
+                'Address' : p['Address'],
+                'Rating' : p['Rating'],
+                'Num_Ratings' : p['Num Ratings']
+            }
+            db.storeinfo.insert_one(store)
+
+    print("Inserted documents")
+    print(db.storeinfo.count())
 
 '''***********************************************
                     scrapeData
@@ -138,7 +170,9 @@ def scrapeData(fn, citystate, city):
                 storeInfo = IterJson(place)
                 gplaces.append(storeInfo)
 
-    writeCSV(list({v['ID']:v for v in gplaces}.values()), fn, city) # insert unique elements into dictionary
+    #writeCSV(list({v['ID']:v for v in gplaces}.values()), fn, city) # insert unique elements into dictionary and make it a list
+    # include call to writeDB
+    writeDB(list({v['ID']:v for v in gplaces}.values()), citystate)
 
 '''***********************************************
                     Main

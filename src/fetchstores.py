@@ -141,7 +141,7 @@ def writeDB(places, citystate):
                 'Num_Ratings' : p['Num Ratings'],
                 'File Location' : "../" + city + "" + state
             }
-            db.storeinfo.insert_one(store)
+            db.storeinfo.update({'_id':p['ID']}, store, upsert=True)
 
     print("Inserted documents")
     print(db.storeinfo.count())
@@ -158,7 +158,7 @@ def writeDB(places, citystate):
         None
 ***********************************************'''
 def scrapeData(fn, citystate, city):
-    credsfile = open("../Geo-Credentials/creds.txt", "r")
+    credsfile = open("../../Geo-Credentials/creds.txt", "r")
     keyval = credsfile.read()
     coords = []
     calcCoords(keyval, coords, citystate)

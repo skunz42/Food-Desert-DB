@@ -21,6 +21,24 @@ class Conn:
         vals = list(cursor)
         retArr = []
         for v in vals:
-            print(v['Name'])
             retArr.append(v)
         return retArr
+
+    def getSummary(self, value):
+        arr = self.getStores(value)
+        retDict = {}
+        numRatings = 0
+        totScore = 0.0
+        pfd = 0
+        for i in range(len(arr)):
+            numRatings += arr[i]['Num_Ratings']
+            tot = arr[i]['Num_Ratings'] * arr[i]['Rating']
+            totScore += tot
+        avg = 5.0 * (totScore/(numRatings*5.0))
+        retDict = {
+            "Name": value,
+            "Average Rating": avg,
+            "Total Number of Ratings": numRatings,
+            "Percent Pop in Food Desert": pfd
+        }
+        return retDict

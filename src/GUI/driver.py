@@ -40,10 +40,9 @@ class Driver(tk.Frame):
         b.grid(row=0, column=2)
         top.mainloop()
 
-    def getChoice(self, value):
+    def getChoiceStores(self, value):
         top = tk.Toplevel()
 
-        #top.geometry("750x250")
         width = 6
         retArr = self.cn.getStores(value)
         index = 0
@@ -69,6 +68,18 @@ class Driver(tk.Frame):
         butt.grid(row=0, column=2)
         top.mainloop()
 
+    def getChoiceSummary(self, value):
+        top = tk.Toplevel()
+        retDict = self.cn.getSummary(value)
+        nl = tk.Label(top, text=retDict['Name'], font=('Helvetica', 16))
+        nl.pack(side=tk.TOP)
+        arl = tk.Label(top, text="Average Rating: " + "{:.2f}".format(retDict['Average Rating']))
+        nrl = tk.Label(top, text="Total Number of Ratings: " + str(retDict['Total Number of Ratings']))
+        pfdl = tk.Label(top, text="Percent of the Population Living in a Food Desert: " + str(retDict['Percent Pop in Food Desert']) + "%")
+        arl.pack(side=tk.LEFT)
+        nrl.pack(side=tk.LEFT)
+        pfdl.pack(side=tk.LEFT)
+
     def create_window(self):
         storeOptions = self.cn.getCities()
         storeOptions.append("all")
@@ -80,12 +91,12 @@ class Driver(tk.Frame):
         default.set("---")
         default2.set("---")
         default3.set("---")
-        self.see_stores = tk.OptionMenu(self, default, *storeOptions, command=self.getChoice)
-        self.see_summary = tk.OptionMenu(self, default2, *summaryOptions)
-        self.see_map = tk.OptionMenu(self, default3, *mapOptions)
-        self.see_stores.pack(side=tk.LEFT, padx=5, pady=10)
-        self.see_summary.pack(side=tk.LEFT, padx=5, pady=20)
-        self.see_map.pack(side=tk.LEFT, padx=5, pady=20)
+        see_stores = tk.OptionMenu(self, default, *storeOptions, command=self.getChoiceStores)
+        see_summary = tk.OptionMenu(self, default2, *summaryOptions, command=self.getChoiceSummary)
+        see_map = tk.OptionMenu(self, default3, *mapOptions)
+        see_stores.pack(side=tk.LEFT, padx=5, pady=10)
+        see_summary.pack(side=tk.LEFT, padx=5, pady=20)
+        see_map.pack(side=tk.LEFT, padx=5, pady=20)
 
 def main():
     root = tk.Tk()

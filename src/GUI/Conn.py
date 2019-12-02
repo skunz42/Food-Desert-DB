@@ -42,3 +42,7 @@ class Conn:
             "Percent Pop in Food Desert": pfd
         }
         return retDict
+
+    def getMap(self, value):
+        cursor = self.db.mapinfo.find({"City": value}, {"_id": 0})
+        return list(cursor)

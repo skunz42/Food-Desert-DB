@@ -1,6 +1,7 @@
 # Sean Kunz
 
 import tkinter as tk
+from PIL import ImageTk, Image
 from Conn import Conn
 
 class Driver(tk.Frame):
@@ -80,6 +81,19 @@ class Driver(tk.Frame):
         nrl.pack(side=tk.LEFT)
         pfdl.pack(side=tk.LEFT)
 
+    def getChoiceMap(self, value):
+        top = tk.Toplevel()
+        retArr = self.cn.getMap(value)
+        path = retArr[0]['Path']
+        nl = tk.Label(top, text=value, font=('Helvetica', 16))
+        nl.pack(side=tk.TOP)
+        img = Image.open(path)
+        img = img.resize((660,510), Image.ANTIALIAS)
+        map = ImageTk.PhotoImage(img)
+        mpl = tk.Label(top, image=map)
+        mpl.pack(side=tk.TOP, expand=tk.YES)
+        top.mainloop()
+
     def create_window(self):
         storeOptions = self.cn.getCities()
         storeOptions.append("all")
@@ -93,7 +107,7 @@ class Driver(tk.Frame):
         default3.set("---")
         see_stores = tk.OptionMenu(self, default, *storeOptions, command=self.getChoiceStores)
         see_summary = tk.OptionMenu(self, default2, *summaryOptions, command=self.getChoiceSummary)
-        see_map = tk.OptionMenu(self, default3, *mapOptions)
+        see_map = tk.OptionMenu(self, default3, *mapOptions, command=self.getChoiceMap)
         see_stores.pack(side=tk.LEFT, padx=5, pady=10)
         see_summary.pack(side=tk.LEFT, padx=5, pady=20)
         see_map.pack(side=tk.LEFT, padx=5, pady=20)

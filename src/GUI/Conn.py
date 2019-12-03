@@ -88,7 +88,8 @@ class Conn:
             "Name": value,
             "Average Rating": avg,
             "Total Number of Ratings": numRatings,
-            "Percent Pop in Food Desert": pfd
+            "Percent Pop in Food Desert": pfd,
+            "Number of Stores": len(arr)
         }
         return retDict
 

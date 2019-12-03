@@ -86,9 +86,13 @@ class Driver(tk.Frame):
         retArr = self.cn.getMap(value)
         path = retArr[0]['Path']
         nl = tk.Label(top, text=value, font=('Helvetica', 16))
+        pfdl = tk.Label(top, text="Percent of Population Living in a Food Desert: " + str(retArr[0]['Percent Food Desert']))
+        popl = tk.Label(top, text="City Population: " + str(retArr[0]['Population']))
         nl.pack(side=tk.TOP)
+        pfdl.pack(side=tk.TOP)
+        popl.pack(side=tk.TOP)
         img = Image.open(path)
-        img = img.resize((660,510), Image.ANTIALIAS)
+        img = img.resize((765,450), Image.ANTIALIAS)
         map = ImageTk.PhotoImage(img)
         mpl = tk.Label(top, image=map)
         mpl.pack(side=tk.TOP, expand=tk.YES)
@@ -98,7 +102,7 @@ class Driver(tk.Frame):
         storeOptions = self.cn.getCities()
         storeOptions.append("all")
         summaryOptions = self.cn.getCities()
-        mapOptions = self.cn.getCities()
+        mapOptions = self.cn.getMapOptions()
         default = tk.StringVar()
         default2 = tk.StringVar()
         default3 = tk.StringVar()
@@ -114,7 +118,6 @@ class Driver(tk.Frame):
 
 def main():
     root = tk.Tk()
-    #root.geometry("600x360+300+300")
     app = Driver(master = root)
     app.mainloop()
 main()

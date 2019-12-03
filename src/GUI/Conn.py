@@ -13,6 +13,10 @@ class Conn:
         cursor = self.db.storeinfo.find({}, {"City": 1, "_id": 0}).distinct("City")
         return list(cursor)
 
+    def getMapOptions(self):
+        cursor = self.db.mapinfo.find({}, {"City": 1, "_id": 0}).distinct("City")
+        return list(cursor)
+
     def getStores(self, value):
         if value == 'all':
             cursor = self.db.storeinfo.find({}, {"_id": 0})

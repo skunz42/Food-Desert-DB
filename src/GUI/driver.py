@@ -6,17 +6,33 @@ from Conn import Conn
 
 class Driver(tk.Frame):
     cn = Conn()
+    # Constructor
     def __init__(self, master=None):
         super().__init__(master)
         self.master = master
         self.pack()
         self.create_window()
 
+    '''***********************************************
+                        newPage
+        purpose:
+            similar to summary window, but works as a new page
+        parameters:
+            top - window object
+            retArr - the list of stores
+            pageNum - which page the user is on
+        return:
+            None
+    ***********************************************'''
     def newPage(self, top, retArr, pageNum):
+        # Number of columns
         width = 6
+        # Calculate index by page number
         index = (1+pageNum)*20
+        # recursive base case
         if index > len(retArr):
             return
+        # delete old window
         top.destroy()
         top = tk.Toplevel()
         for i in range(index, index+20): #Rows
@@ -37,16 +53,27 @@ class Driver(tk.Frame):
                     ratext = retArr[i]['Rating']
                 b = tk.Label(top, text=ratext)
                 b.grid(row=i+1, column=j)
+        # via stack overflow
         b = tk.Button(top, text="Load next", command= lambda : self.newPage(top, retArr, pageNum+1))
         b.grid(row=0, column=2)
         top.mainloop()
 
+    '''***********************************************
+                        getChoiceStores
+        purpose:
+            displays the stores window
+        parameters:
+            value - City name from the drop down menu
+        return:
+            None
+    ***********************************************'''
     def getChoiceStores(self, value):
         top = tk.Toplevel()
 
-        width = 6
+        width = 6 # number of columns
         retArr = self.cn.getStores(value)
         index = 0
+        # creates grid
         for i in range(index, index+20): #Rows
             if i > len(retArr)-1:
                 break
@@ -69,6 +96,15 @@ class Driver(tk.Frame):
         butt.grid(row=0, column=2)
         top.mainloop()
 
+    '''***********************************************
+                        getChoiceSummary
+        purpose:
+            displays the summary window
+        parameters:
+            value - City name from the drop down menu
+        return:
+            None
+    ***********************************************'''
     def getChoiceSummary(self, value):
         top = tk.Toplevel()
         retDict = self.cn.getSummary(value)
@@ -81,6 +117,15 @@ class Driver(tk.Frame):
         nrl.pack(side=tk.LEFT)
         pfdl.pack(side=tk.LEFT)
 
+    '''***********************************************
+                        getChoiceMap
+        purpose:
+            displays the map window
+        parameters:
+            value - City name from the drop down menu
+        return:
+            None
+    ***********************************************'''
     def getChoiceMap(self, value):
         top = tk.Toplevel()
         retArr = self.cn.getMap(value)
@@ -98,11 +143,23 @@ class Driver(tk.Frame):
         mpl.pack(side=tk.TOP, expand=tk.YES)
         top.mainloop()
 
+    '''***********************************************
+                        create_window
+        purpose:
+            creates the main window
+        parameters:
+            None
+        return:
+            None
+    ***********************************************'''
     def create_window(self):
+        # Gets drop down menu options
         storeOptions = self.cn.getCities()
         storeOptions.append("all")
         summaryOptions = self.cn.getCities()
         mapOptions = self.cn.getMapOptions()
+
+        # Sets up drop down menus
         default = tk.StringVar()
         default2 = tk.StringVar()
         default3 = tk.StringVar()
@@ -116,6 +173,9 @@ class Driver(tk.Frame):
         see_summary.pack(side=tk.LEFT, padx=5, pady=20)
         see_map.pack(side=tk.LEFT, padx=5, pady=20)
 
+'''***********************************************
+                    Main
+***********************************************'''
 def main():
     root = tk.Tk()
     app = Driver(master = root)

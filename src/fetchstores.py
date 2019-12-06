@@ -171,7 +171,7 @@ def scrapeData(fn, citystate, city):
                 storeInfo = IterJson(place)
                 gplaces.append(storeInfo)
 
-    #writeCSV(list({v['ID']:v for v in gplaces}.values()), fn, city) # insert unique elements into dictionary and make it a list
+    writeCSV(list({v['ID']:v for v in gplaces}.values()), fn, city) # insert unique elements into dictionary and make it a list
     # include call to writeDB
     writeDB(list({v['ID']:v for v in gplaces}.values()), citystate)
 
